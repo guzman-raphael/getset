@@ -368,6 +368,7 @@ fn produce(ast: &DeriveInput, params: &GenParams) -> TokenStream2 {
             let generated = generate::implement_for_unnamed(field, params);
 
             quote! {
+                #[uniffi::export]
                 impl #impl_generics #name #ty_generics #where_clause {
                     #generated
                 }
