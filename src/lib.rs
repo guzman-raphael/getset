@@ -206,9 +206,11 @@ let tup = CopyUnaryTuple(42);
 extern crate quote;
 
 use proc_macro::TokenStream;
-use proc_macro2::{Punct, Spacing, TokenStream as TokenStream2};
+use proc_macro2::TokenStream as TokenStream2;
 use proc_macro_error2::{abort, abort_call_site, proc_macro_error};
-use syn::{parse_macro_input, spanned::Spanned, DataStruct, DeriveInput, Meta};
+use syn::{
+    parse_macro_input, parse_quote, spanned::Spanned, Attribute, DataStruct, DeriveInput, Meta,
+};
 
 use crate::generate::{GenMode, GenParams};
 
@@ -355,7 +357,6 @@ fn produce(ast: &DeriveInput, params: &GenParams) -> TokenStream2 {
     let name = &ast.ident;
     let generics = &ast.generics;
     let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
-    let pound = Punct::new('#', Spacing::Alone);
     // Is it a struct?
     if let syn::Data::Struct(DataStruct { ref fields, .. }) = ast.data {
         // Handle unary struct
@@ -366,18 +367,22 @@ fn produce(ast: &DeriveInput, params: &GenParams) -> TokenStream2 {
             // This unwrap is safe because we know there is exactly one field
             let field = fields.iter().next().unwrap();
             let generated = generate::implement_for_unnamed(field, params);
-
+            let attr: Attribute = parse_quote! {
+                #[uniffi::export]
+            };
             quote! {
-                #pound [uniffi::export]
+                #attr
                 impl #impl_generics #name #ty_generics #where_clause {
                     #generated
                 }
             }
         } else {
             let generated = fields.iter().map(|f| generate::implement(f, params));
-
+            let attr: Attribute = parse_quote! {
+                #[uniffi::export]
+            };
             quote! {
-                #pound [uniffi::export]
+                #attr
                 impl #impl_generics #name #ty_generics #where_clause {
                     #(#generated)*
                 }
