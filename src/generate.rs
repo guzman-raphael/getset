@@ -173,7 +173,7 @@ pub fn implement(field: &Field, params: &GenParams) -> TokenStream2 {
             Get => {
                 quote! {
                     #(#doc)*
-                    #[inline(always)]
+                    // #[inline(always)]
                     #visibility fn #fn_name(&self) -> &#ty {
                         &self.#field_name
                     }
@@ -182,7 +182,7 @@ pub fn implement(field: &Field, params: &GenParams) -> TokenStream2 {
             GetClone => {
                 quote! {
                     #(#doc)*
-                    #[inline(always)]
+                    // #[inline(always)]
                     #visibility fn #fn_name(&self) -> #ty {
                         self.#field_name.clone()
                     }
@@ -191,7 +191,7 @@ pub fn implement(field: &Field, params: &GenParams) -> TokenStream2 {
             GetCopy => {
                 quote! {
                     #(#doc)*
-                    #[inline(always)]
+                    // #[inline(always)]
                     #visibility fn #fn_name(&self) -> #ty {
                         self.#field_name
                     }
@@ -200,7 +200,7 @@ pub fn implement(field: &Field, params: &GenParams) -> TokenStream2 {
             Set => {
                 quote! {
                     #(#doc)*
-                    #[inline(always)]
+                    // #[inline(always)]
                     #visibility fn #fn_name(&mut self, val: #ty) -> &mut Self {
                         self.#field_name = val;
                         self
@@ -210,7 +210,7 @@ pub fn implement(field: &Field, params: &GenParams) -> TokenStream2 {
             GetMut => {
                 quote! {
                     #(#doc)*
-                    #[inline(always)]
+                    // #[inline(always)]
                     #visibility fn #fn_name(&mut self) -> &mut #ty {
                         &mut self.#field_name
                     }
@@ -219,7 +219,7 @@ pub fn implement(field: &Field, params: &GenParams) -> TokenStream2 {
             SetWith => {
                 quote! {
                     #(#doc)*
-                    #[inline(always)]
+                    // #[inline(always)]
                     #visibility fn #fn_name(mut self, val: #ty) -> Self {
                         self.#field_name = val;
                         self
@@ -250,7 +250,7 @@ pub fn implement_for_unnamed(field: &Field, params: &GenParams) -> TokenStream2 
                 let fn_name = Ident::new("get", Span::call_site());
                 quote! {
                     #(#doc)*
-                    #[inline(always)]
+                    // #[inline(always)]
                     #visibility fn #fn_name(&self) -> &#ty {
                         &self.0
                     }
@@ -260,7 +260,7 @@ pub fn implement_for_unnamed(field: &Field, params: &GenParams) -> TokenStream2 
                 let fn_name = Ident::new("get", Span::call_site());
                 quote! {
                     #(#doc)*
-                    #[inline(always)]
+                    // #[inline(always)]
                     #visibility fn #fn_name(&self) -> #ty {
                         self.0.clone()
                     }
@@ -270,7 +270,7 @@ pub fn implement_for_unnamed(field: &Field, params: &GenParams) -> TokenStream2 
                 let fn_name = Ident::new("get", Span::call_site());
                 quote! {
                     #(#doc)*
-                    #[inline(always)]
+                    // #[inline(always)]
                     #visibility fn #fn_name(&self) -> #ty {
                         self.0
                     }
@@ -280,7 +280,7 @@ pub fn implement_for_unnamed(field: &Field, params: &GenParams) -> TokenStream2 
                 let fn_name = Ident::new("set", Span::call_site());
                 quote! {
                     #(#doc)*
-                    #[inline(always)]
+                    // #[inline(always)]
                     #visibility fn #fn_name(&mut self, val: #ty) -> &mut Self {
                         self.0 = val;
                         self
@@ -291,7 +291,7 @@ pub fn implement_for_unnamed(field: &Field, params: &GenParams) -> TokenStream2 
                 let fn_name = Ident::new("get_mut", Span::call_site());
                 quote! {
                     #(#doc)*
-                    #[inline(always)]
+                    // #[inline(always)]
                     #visibility fn #fn_name(&mut self) -> &mut #ty {
                         &mut self.0
                     }
@@ -301,7 +301,7 @@ pub fn implement_for_unnamed(field: &Field, params: &GenParams) -> TokenStream2 
                 let fn_name = Ident::new("set_with", Span::call_site());
                 quote! {
                     #(#doc)*
-                    #[inline(always)]
+                    // #[inline(always)]
                     #visibility fn #fn_name(mut self, val: #ty) -> Self {
                         self.0 = val;
                         self
