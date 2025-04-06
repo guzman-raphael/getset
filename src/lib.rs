@@ -206,7 +206,7 @@ let tup = CopyUnaryTuple(42);
 extern crate quote;
 
 use proc_macro::TokenStream;
-use proc_macro2::TokenStream as TokenStream2;
+use proc_macro2::{Punct, Spacing, TokenStream as TokenStream2};
 use proc_macro_error2::{abort, abort_call_site, proc_macro_error};
 use syn::{parse_macro_input, spanned::Spanned, DataStruct, DeriveInput, Meta};
 
@@ -355,7 +355,7 @@ fn produce(ast: &DeriveInput, params: &GenParams) -> TokenStream2 {
     let name = &ast.ident;
     let generics = &ast.generics;
     let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
-
+    let pound = Punct::new('#', Spacing::Alone);
     // Is it a struct?
     if let syn::Data::Struct(DataStruct { ref fields, .. }) = ast.data {
         // Handle unary struct
@@ -368,7 +368,7 @@ fn produce(ast: &DeriveInput, params: &GenParams) -> TokenStream2 {
             let generated = generate::implement_for_unnamed(field, params);
 
             quote! {
-                #[uniffi::export]
+                #pound [uniffi::export]
                 impl #impl_generics #name #ty_generics #where_clause {
                     #generated
                 }
@@ -377,7 +377,7 @@ fn produce(ast: &DeriveInput, params: &GenParams) -> TokenStream2 {
             let generated = fields.iter().map(|f| generate::implement(f, params));
 
             quote! {
-                #[uniffi::export]
+                #pound [uniffi::export]
                 impl #impl_generics #name #ty_generics #where_clause {
                     #(#generated)*
                 }
