@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Rust: Debug single integration test",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--package=getset",
+                    "--test",
+                    "attach_attributes"
+                ],
+                "filter": {
+                    "kind": "test"
+                }
+            },
+            "args": [
+                "--exact",
+                "--nocapture",
+                "simple"
+            ],
+            "cwd": "${workspaceFolder}",
+        },
+    ]
+}
