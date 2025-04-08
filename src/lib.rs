@@ -272,7 +272,7 @@ fn parse_global_attr(attrs: &[Attribute], mode: GenMode) -> GenParams {
         global_attr: attrs
             .iter()
             .filter_map(|v| {
-                let (last, attrs_exist) = parse_attr(v, mode);
+                let (last, attrs_exist) = parse_attr(true, v, mode);
                 if let Some(Meta::NameValue(name_value)) = &attrs_exist {
                     let attr_str = expr_to_string(&name_value.value).unwrap();
                     impl_attrs.extend(
@@ -288,7 +288,11 @@ fn parse_global_attr(attrs: &[Attribute], mode: GenMode) -> GenParams {
     }
 }
 
-fn parse_attr(attr: &syn::Attribute, mode: GenMode) -> (Option<Meta>, Option<Meta>) {
+fn parse_attr(
+    globally_called: bool,
+    attr: &syn::Attribute,
+    mode: GenMode,
+) -> (Option<Meta>, Option<Meta>) {
     use syn::{punctuated::Punctuated, Token};
 
     if attr.path().is_ident("getset") {
@@ -308,7 +312,7 @@ fn parse_attr(attr: &syn::Attribute, mode: GenMode) -> (Option<Meta>, Option<Met
                     || meta.path().is_ident("set")
                     || meta.path().is_ident("set_with")
                     || meta.path().is_ident("skip")
-                    || meta.path().is_ident("impl_attrs"))
+                    || (meta.path().is_ident("impl_attrs") && globally_called))
                 {
                     abort!(meta.path().span(), "unknown setter or getter")
                 }

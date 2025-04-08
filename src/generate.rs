@@ -113,7 +113,7 @@ fn has_prefix_attr(f: &Field, params: &GenParams) -> bool {
     let field_attr_has_prefix = f
         .attrs
         .iter()
-        .filter_map(|attr| parse_attr(attr, params.mode).0)
+        .filter_map(|attr| parse_attr(false, attr, params.mode).0)
         .find(|meta| {
             meta.path().is_ident("get")
                 || meta.path().is_ident("get_clone")
@@ -163,7 +163,7 @@ pub fn implement(field: &Field, params: &GenParams) -> TokenStream2 {
     let attr = field
         .attrs
         .iter()
-        .filter_map(|v| parse_attr(v, params.mode).0)
+        .filter_map(|v| parse_attr(false, v, params.mode).0)
         .last()
         .or_else(|| params.global_attr.clone());
 
@@ -238,7 +238,7 @@ pub fn implement_for_unnamed(field: &Field, params: &GenParams) -> TokenStream2 
     let attr = field
         .attrs
         .iter()
-        .filter_map(|v| parse_attr(v, params.mode).0)
+        .filter_map(|v| parse_attr(false, v, params.mode).0)
         .last()
         .or_else(|| params.global_attr.clone());
     let ty = field.ty.clone();
